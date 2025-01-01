@@ -30,13 +30,29 @@ contract HemReward is ERC20, Ownable {
     }
 
     function burn(uint256 amount) public {
-        _burn(msg.msg.sender, amount);
-        t0talMinted -= amount;
+        _burn(msg.sender, amount);
+        totalMinted -= amount;
     }
 
     function distributeReward(address user, uint256 amount) public onlyOwner {
-        require(to != address(0), "Invalid address");
-        _mint(to, amount);
+        require(user != address(0), "Invalid address");
+        _mint(user, amount);
         emit rewardDistributed(user, amount);
+    }
+
+    function setReferral(address referrer) public {
+        require(referrals[msg.sender] == address(0), "Invalid address");
+        referrals[msg.sender] = referrer;
+    }
+
+    function claimReferralReward(address referredUser) public {
+        address referrer = referrals[referredUser];
+        require(referrer != address(0), "No referrer found");
+
+        uint256 reward = 50 * (10 ** decimals());
+        _mint(referrer, reward);
+        referralRewards[referrer] += reward;
+
+        emit referralRewardsClaimed(referrer, reward);
     }
 }
