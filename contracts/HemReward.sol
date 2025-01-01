@@ -23,7 +23,20 @@ contract HemReward is ERC20, Ownable {
         totalMinted = _initialSupply * (10 ** decimals());
     }
 
-   function mint( address to, uint256 amount ) external onlyOwner {
-    
-   }
+    function mint(address to, uint256 amount) external onlyOwner {
+        require(totalMinted + amount <= maxSupply, "MaxSupply exceeded");
+        _mint(to, amount);
+        totalMinted += amount;
+    }
+
+    function burn(uint256 amount) public {
+        _burn(msg.msg.sender, amount);
+        t0talMinted -= amount;
+    }
+
+    function distributeReward(address user, uint256 amount) public onlyOwner {
+        require(to != address(0), "Invalid address");
+        _mint(to, amount);
+        emit rewardDistributed(user, amount);
+    }
 }
