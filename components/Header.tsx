@@ -51,7 +51,7 @@ const Header: React.FC = () => {
               <CgMenuLeft className="h-6 w-6" aria-hidden="true" />
             </motion.button>
           </div>
-          <nav className="hidden md:flex space-x-10 text-gray-700 font-semibold text-web3-base">
+          <nav className="hidden md:flex space-x-10 text-white font-semibold text-web3-base">
             <Link href="/bridge" className="hover:text-blue-600 transition-colors font-inter">Cross-Chain Bridge</Link>
             <Link href="/transfers" className="hover:text-blue-600 transition-colors font-inter">Transfer History</Link>
             <Link href="/supported-tokens" className="hover:text-blue-600 transition-colors font-inter">Multi-Chain Tokens</Link>
