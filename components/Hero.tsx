@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 
 const Hero = () => {
   return (
-    <main className="relative w-full px-8 sm:px-6 lg:px-32 pt-32 pb-16">
+    <main className="relative w-full px-4 sm:px-6 lg:px-32 pt-24 sm:pt-32 pb-12 sm:pb-16">
       <div className="max-w-[1440px] mx-auto">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-16 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16 relative z-10">
           {/* Hero Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -19,7 +19,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="inline-flex items-center px-4 py-2 rounded-full bg-purple-900/30 border border-purple-700/50 mb-8"
+              className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-purple-900/30 border border-purple-700/50 mb-6 sm:mb-8"
             >
               <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse mr-2"></span>
               <span className="text-purple-200 text-sm">
@@ -28,7 +28,7 @@ const Hero = () => {
             </motion.div>
 
             <motion.h1
-              className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
+              className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
@@ -40,7 +40,7 @@ const Hero = () => {
             </motion.h1>
 
             <motion.p
-              className="text-lg text-gray-300 mb-8 leading-relaxed"
+              className="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 leading-relaxed max-w-[540px] mx-auto lg:mx-0"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
@@ -54,7 +54,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start"
             >
               <button className="px-8 py-4 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 transform hover:-translate-y-1">
                 Get Started Now
@@ -69,18 +69,18 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8 }}
-              className="grid grid-cols-2 sm:grid-cols-3 gap-8 mt-12 pt-8 border-t border-purple-700/30"
+              className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-8 mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-purple-700/30"
             >
               {[
                 { value: "10K+", label: "Active Users" },
                 { value: "$2M+", label: "Rewards Given" },
                 { value: "98%", label: "Satisfaction" },
               ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-2xl font-bold text-white mb-1">
+                <div key={index} className="text-center px-2">
+                  <div className="text-xl sm:text-2xl font-bold text-white mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-gray-400">{stat.label}</div>
+                  <div className="text-xs sm:text-sm text-gray-400">{stat.label}</div>
                 </div>
               ))}
             </motion.div>

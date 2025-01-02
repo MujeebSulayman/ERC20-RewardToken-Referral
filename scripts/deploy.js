@@ -1,34 +1,60 @@
+const { ethers } = require("hardhat");
+const { parseEther } = ethers;
+
 async function main() {
-	const [deployer] = await ethers.getSigners();
+  const [deployer] = await ethers.getSigners();
 
-	console.log('Deploying contracts with the account:', deployer.address);
+  console.log("Deploying contracts with the account:", deployer.address);
+  try {
+    console.log(
+      "Account balance:",
+      (await ethers.provider.getBalance(deployer.address)).toString()
+    );
 
-	const balance = await deployer.getBalance();
-	console.log('Account balance:', balance.toString());
+    const HemReward = await ethers.getContractFactory("HemReward");
 
-	const HemReward = await ethers.getContractFactory('HemReward');
+    const initialSupply = parseEther("100000");
+    console.log("Initial supply:", initialSupply.toString());
 
-	const initialSupply = ethers.utils.parseEther('1000000');
-	console.log('Initial supply:', initialSupply.toString());
+    const maxSupply = parseEther("1000000");
+    console.log("Max supply:", maxSupply.toString());
 
-	const maxSupply = ethers.utils.parseEther('10000000');
-	console.log('Max supply:', maxSupply.toString());
+    console.log("Deploying HemReward contract...");
+    const hemReward = await HemReward.deploy(initialSupply, maxSupply);
 
-	const referrerReward = ethers.utils.parseEther('50', 'wei');
-	console.log('Referrer reward:', referrerReward.toString());
+    console.log("Waiting for deployment...");
+    await hemReward.waitForDeployment();
 
-	const hemReward = await HemReward.deploy(
-		initialSupply,
-		maxSupply,
-		referrerReward
-	);
-	await hemReward.deployed();
+    const hemRewardAddress = await hemReward.getAddress();
+    console.log("HemReward deployed to:", hemRewardAddress);
 
-	console.log('HemReward address:', hemReward.address);
+    const fs = require("fs");
+    const contractsDir = __dirname + "/../contracts";
+
+    if (!fs.existsSync(contractsDir)) {
+      fs.mkdirSync(contractsDir);
+    }
+
+    fs.writeFileSync(
+      contractsDir + "/contractAddress.json",
+      JSON.stringify(
+        {
+          HemReward: hemRewardAddress,
+        },
+        undefined,
+        2
+      )
+    );
+  } catch (error) {
+    console.log("Deployment failed");
+    console.error("error:", error.message);
+    throw error;
+  }
 }
+
 main()
-	.then(() => process.exit(0))
-	.catch((error) => {
-		console.error(error);
-		process.exit(1);
-	});
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
