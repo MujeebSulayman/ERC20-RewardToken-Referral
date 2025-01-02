@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Circle -->
+    <circle cx="400" cy="300" r="250" fill="#4C1D95" opacity="0.1"/>
+    
+    <!-- Medical Cross -->
+    <path d="M380 150h40v100h100v40h-100v100h-40v-100h-100v-40h100v-100z" fill="#8B5CF6"/>
+    
+    <!-- Reward Stars -->
+    <path d="M600 200l20 40 40 20-40 20-20 40-20-40-40-20 40-20 20-40z" fill="#C4B5FD"/>
+    <path d="M200 400l15 30 30 15-30 15-15 30-15-30-30-15 30-15 15-30z" fill="#C4B5FD"/>
+    <path d="M650 350l10 20 20 10-20 10-10 20-10-20-20-10 20-10 10-20z" fill="#C4B5FD"/>
+    
+    <!-- Decorative Lines -->
+    <path d="M150 250q100 50 200 0" stroke="#8B5CF6" stroke-width="4" fill="none"/>
+    <path d="M450 350q100 50 200 0" stroke="#8B5CF6" stroke-width="4" fill="none"/>
+</svg>
