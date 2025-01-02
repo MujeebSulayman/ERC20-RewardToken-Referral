@@ -52,9 +52,10 @@ const Header: React.FC = () => {
             </motion.button>
           </div>
           <nav className="hidden md:flex space-x-10 text-white font-semibold text-web3-base">
-            <Link href="/bridge" className="hover:text-blue-600 transition-colors font-inter">Cross-Chain Bridge</Link>
-            <Link href="/transfers" className="hover:text-blue-600 transition-colors font-inter">Transfer History</Link>
-            <Link href="/supported-tokens" className="hover:text-blue-600 transition-colors font-inter">Multi-Chain Tokens</Link>
+            <Link href="/token" className="hover:text-blue-600 transition-colors font-inter">Token</Link>
+            <Link href="/rewards" className="hover:text-blue-600 transition-colors font-inter">Rewards</Link>
+            <Link href="/referrals" className="hover:text-blue-600 transition-colors font-inter">Referrals</Link>
+            <Link href="/bridge" className="hover:text-blue-600 transition-colors font-inter">Bridge</Link>
           </nav>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
               <ConnectButton
@@ -99,9 +100,10 @@ const Header: React.FC = () => {
                 </div>
                 <div className="mt-6">
                   <nav className="grid gap-y-8">
-                    <NavLink href="/bridge">Cross-Chain Bridge</NavLink>
-                    <NavLink href="/transfers">Transfer History</NavLink>
-                    <NavLink href="/supported-tokens">Multi-Chain Tokens</NavLink>
+                    <NavLink href="/token">Token</NavLink>
+                    <NavLink href="/rewards">Rewards</NavLink>
+                    <NavLink href="/referrals">Referrals</NavLink>
+                    <NavLink href="/bridge">Bridge</NavLink>
                   </nav>
                 </div>
               </div>
