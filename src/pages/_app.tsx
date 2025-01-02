@@ -7,6 +7,12 @@ import { WagmiProvider } from 'wagmi';
 import { darkTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 
 import { config } from '../wagmi';
+import { Space_Grotesk } from 'next/font/google';
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 const client = new QueryClient();
 
@@ -22,7 +28,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 						fontStack: 'system',
 						overlayBlur: 'small',
 					})}>
-					<Component {...pageProps} />
+					<main className={`${spaceGrotesk.className}`}>
+						<Component {...pageProps} />
+					</main>
 				</RainbowKitProvider>
 			</QueryClientProvider>
 		</WagmiProvider>
