@@ -1,8 +1,58 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { distributeReward, setReferral } from "../services/blockchain";
+import { truncateAddress, reportError } from "../utils/web3.utils";
+import { RewardParams } from "../types/contract.types";
 
 const Hero = () => {
+  const [account, setAccount] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const connectWallet = async () => {
+    try {
+      if (typeof window.ethereum !== "undefined") {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        setAccount(accounts[0]);
+      } else {
+        alert("Please install MetaMask!");
+      }
+    } catch (error) {
+      reportError(error);
+    }
+  };
+
+  const handleDistributeReward = async () => {
+    try {
+      setLoading(true);
+      const rewardParams: RewardParams = {
+        user: account,
+        amount: 100 // Example amount
+      };
+      await distributeReward(rewardParams.user, rewardParams.amount);
+      alert("Reward distributed successfully!");
+    } catch (error) {
+      reportError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // Check if wallet is already connected
+    if (typeof window.ethereum !== "undefined") {
+      window.ethereum.request({ method: "eth_accounts" })
+        .then((accounts: string[]) => {
+          if (accounts.length > 0) {
+            setAccount(accounts[0]);
+          }
+        })
+        .catch(reportError);
+    }
+  }, []);
+
   return (
     <main className="relative w-full px-4 sm:px-6 lg:px-32 pt-24 sm:pt-32 pb-12 sm:pb-16">
       <div className="max-w-[1440px] mx-auto">
@@ -51,76 +101,52 @@ const Hero = () => {
             </motion.p>
 
             <motion.div
+              className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
-              className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start"
             >
-              <button className="px-8 py-4 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 transform hover:-translate-y-1">
-                Get Started Now
-              </button>
-              <button className="px-8 py-4 rounded-lg border border-purple-700/50 text-white font-semibold hover:bg-purple-900/30 transition-all duration-300">
-                Learn More →
-              </button>
-            </motion.div>
-
-            {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-8 mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-purple-700/30"
-            >
-              {[
-                { value: "10K+", label: "Active Users" },
-                { value: "$2M+", label: "Rewards Given" },
-                { value: "98%", label: "Satisfaction" },
-              ].map((stat, index) => (
-                <div key={index} className="text-center px-2">
-                  <div className="text-xl sm:text-2xl font-bold text-white mb-1">
-                    {stat.value}
-                  </div>
-                  <div className="text-xs sm:text-sm text-gray-400">{stat.label}</div>
+              {!account ? (
+                <button
+                  onClick={connectWallet}
+                  className="px-8 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold hover:opacity-90 transition-all"
+                >
+                  Connect Wallet
+                </button>
+              ) : (
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <span className="px-6 py-3 rounded-lg bg-purple-900/30 border border-purple-700/50 text-purple-200">
+                    {truncateAddress(account)}
+                  </span>
+                  <button
+                    onClick={handleDistributeReward}
+                    disabled={loading}
+                    className={`px-8 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold hover:opacity-90 transition-all ${
+                      loading ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    {loading ? "Processing..." : "Claim Rewards"}
+                  </button>
                 </div>
-              ))}
+              )}
             </motion.div>
           </motion.div>
 
-          {/* Hero Image/Visual */}
+          {/* Hero Image */}
           <motion.div
-            className="flex-1 relative lg:min-w-[50%]"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="flex-1 max-w-[540px] lg:max-w-none"
           >
-            <div className="relative w-full aspect-square max-w-[700px] mx-auto">
-              {/* Decorative Grid */}
-              <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 gap-4">
-                {Array(9)
-                  .fill(0)
-                  .map((_, i) => (
-                    <div
-                      key={i}
-                      className="border border-purple-700/20 rounded-lg backdrop-blur-sm"
-                    />
-                  ))}
-              </div>
-
-              {/* Main Image */}
-              <div className="relative z-10 w-full h-full p-8">
-                <Image
-                  src="/hero-illustration.svg"
-                  alt="Healthcare Rewards Platform"
-                  layout="fill"
-                  objectFit="contain"
-                  priority
-                  className="drop-shadow-2xl"
-                />
-              </div>
-
-              {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full opacity-20 animate-float-slow" />
-              <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full opacity-20 animate-float" />
+            <div className="relative w-full aspect-square">
+              <Image
+                src="/hero-image.png"
+                alt="Healthcare Rewards"
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
           </motion.div>
         </div>
