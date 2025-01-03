@@ -78,7 +78,7 @@ const claimReferralReward = async (referredUser: string): Promise<any> => {
 const getMaxSupply = async (): Promise<string> => {
   try {
     const contract = await getEthereumContract();
-    const maxSupply = await contract.maxSupply();
+    const maxSupply = await contract.maxSupply({ cache: 'no-store' });
     return fromWei(maxSupply);
   } catch (error) {
     console.error("Error getting max supply:", error);
@@ -89,11 +89,50 @@ const getMaxSupply = async (): Promise<string> => {
 const getTotalMinted = async (): Promise<string> => {
   try {
     const contract = await getEthereumContract();
-    const totalMinted = await contract.totalMinted();
+    const totalMinted = await contract.totalMinted({ cache: 'no-store' });
     return fromWei(totalMinted);
   } catch (error) {
     console.error("Error getting total minted:", error);
     return "0";
+  }
+};
+
+const getTotalClaimed = async (): Promise<string> => {
+  try {
+    const contract = await getEthereumContract();
+    const totalClaimed = await contract.totalClaimed({ cache: 'no-store' });
+    return fromWei(totalClaimed);
+  } catch (error) {
+    console.error("Error getting total claimed:", error);
+    return "0";
+  }
+};
+
+const getClaimedRewards = async (address: string): Promise<string> => {
+  try {
+    const contract = await getEthereumContract();
+    const claimed = await contract.getClaimedRewards(address, { cache: 'no-store' });
+    return fromWei(claimed);
+  } catch (error) {
+    console.error("Error getting claimed rewards:", error);
+    return "0";
+  }
+};
+
+const mintTokens = async (): Promise<any> => {
+  if (!ethereum) {
+    return Promise.reject(new Error("Please install a wallet provider"));
+  }
+
+  try {
+    const contract = await getEthereumContract();
+    const claimed = await getTotalClaimed();
+    const amount = toWei(parseFloat(claimed));
+    tx = await contract.mint(amount);
+    await tx.wait();
+    return Promise.resolve(tx);
+  } catch (error) {
+    return Promise.reject(error);
   }
 };
 
@@ -103,6 +142,9 @@ export {
   claimReferralReward,
   getMaxSupply,
   getTotalMinted,
+  getTotalClaimed,
+  getClaimedRewards,
+  mintTokens,
   toWei,
   fromWei,
 };

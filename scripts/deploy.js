@@ -13,10 +13,10 @@ async function main() {
 
     const HemReward = await ethers.getContractFactory("HemReward");
 
-    const initialSupply = parseEther("100000");
+    const initialSupply = parseEther("100");
     console.log("Initial supply:", initialSupply.toString());
 
-    const maxSupply = parseEther("1000000");
+    const maxSupply = parseEther("1000");
     console.log("Max supply:", maxSupply.toString());
 
     console.log("Deploying HemReward contract...");

@@ -32,7 +32,10 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
-            <Link href={"/"} className="text-web3-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 tracking-tight">
+            <Link
+              href={"/"}
+              className="text-web3-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 tracking-tight"
+            >
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -54,22 +57,36 @@ const Header: React.FC = () => {
             </motion.button>
           </div>
           <nav className="hidden md:flex space-x-10 text-white font-semibold text-web3-base">
-            <Link href="/token" className="hover:text-blue-600 transition-colors font-inter">Token</Link>
-            <Link href="/rewards" className="hover:text-blue-600 transition-colors font-inter">Rewards</Link>
-            <Link href="/referrals" className="hover:text-blue-600 transition-colors font-inter">Referrals</Link>
-            <Link href="/bridge" className="hover:text-blue-600 transition-colors font-inter">Bridge</Link>
+            <Link
+              href="/token"
+              className="hover:text-blue-600 transition-colors font-inter"
+            >
+              Token
+            </Link>
+            <Link
+              href="/rewards"
+              className="hover:text-blue-600 transition-colors font-inter"
+            >
+              Rewards
+            </Link>
+            <Link
+              href="/referrals"
+              className="hover:text-blue-600 transition-colors font-inter"
+            >
+              Referrals
+            </Link>
           </nav>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-              <ConnectButton
-                showBalance={false}
-                accountStatus={{
-                  smallScreen: "avatar",
-                  largeScreen: "full",
-                }}
-              />
-            </div>
+            <ConnectButton
+              showBalance={false}
+              accountStatus={{
+                smallScreen: "avatar",
+                largeScreen: "full",
+              }}
+            />
           </div>
         </div>
+      </div>
 
       <AnimatePresence>
         {isOpen && (
@@ -105,7 +122,6 @@ const Header: React.FC = () => {
                     <NavLink href="/token">Token</NavLink>
                     <NavLink href="/rewards">Rewards</NavLink>
                     <NavLink href="/referrals">Referrals</NavLink>
-                    <NavLink href="/bridge">Bridge</NavLink>
                   </nav>
                 </div>
               </div>

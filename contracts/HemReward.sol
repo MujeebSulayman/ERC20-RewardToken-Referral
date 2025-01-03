@@ -7,12 +7,15 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract HemReward is ERC20, Ownable {
     mapping(address => address) referrals;
     mapping(address => uint256) referralRewards;
+    mapping(address => uint256) public claimedRewards;
 
     uint256 public maxSupply;
     uint256 public totalMinted;
+    uint256 public totalClaimed;
 
     event referralRewardsClaimed(address indexed referrer, uint256 reward);
     event rewardDistributed(address indexed user, uint256 amount);
+    event rewardsClaimed(address indexed user, uint256 amount);
 
     constructor(
         uint256 _initialSupply,
@@ -21,11 +24,12 @@ contract HemReward is ERC20, Ownable {
         _mint(msg.sender, _initialSupply * (10 ** decimals()));
         maxSupply = _maxSupply * (10 ** decimals());
         totalMinted = _initialSupply * (10 ** decimals());
+        totalClaimed = 0;
     }
 
-    function mint(address to, uint256 amount) external onlyOwner {
+    function mint(uint256 amount) external onlyOwner {
         require(totalMinted + amount <= maxSupply, "MaxSupply exceeded");
-        _mint(to, amount);
+        _mint(msg.sender, amount);
         totalMinted += amount;
     }
 
@@ -36,7 +40,11 @@ contract HemReward is ERC20, Ownable {
 
     function distributeReward(address user, uint256 amount) public onlyOwner {
         require(user != address(0), "Invalid address");
+        require(totalMinted + amount <= maxSupply, "MaxSupply exceeded");
         _mint(user, amount);
+        totalMinted += amount;
+        totalClaimed += amount;
+        claimedRewards[user] += amount;
         emit rewardDistributed(user, amount);
     }
 
@@ -48,11 +56,22 @@ contract HemReward is ERC20, Ownable {
     function claimReferralReward(address referredUser) public {
         address referrer = referrals[referredUser];
         require(referrer != address(0), "No referrer found");
+        require(referralRewards[referrer] > 0, "No rewards to claim");
 
-        uint256 reward = 50 * (10 ** decimals());
+        uint256 reward = referralRewards[referrer];
+        referralRewards[referrer] = 0;
         _mint(referrer, reward);
-        referralRewards[referrer] += reward;
-
+        totalMinted += reward;
+        totalClaimed += reward;
+        claimedRewards[referrer] += reward;
         emit referralRewardsClaimed(referrer, reward);
+    }
+
+    function getClaimedRewards(address user) public view returns (uint256) {
+        return claimedRewards[user];
+    }
+
+    function getTotalClaimed() public view returns (uint256) {
+        return totalClaimed;
     }
 }
