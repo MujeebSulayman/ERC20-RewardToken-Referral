@@ -67,6 +67,18 @@ contract HemReward is ERC20, Ownable {
         emit referralRewardsClaimed(referrer, reward);
     }
 
+    function claimTokens(uint256 amount) public {
+        require(amount > 0, "Claim amount must be greater than 0");
+        require(
+            claimedRewards[msg.sender] >= amount,
+            "Insufficient claimable tokens"
+        );
+        claimedRewards[msg.sender] -= amount;
+        _transfer(address(this), msg.sender, amount);
+        totalClaimed += amount;
+        emit rewardsClaimed(msg.sender, amount);
+    }
+
     function getClaimedRewards(address user) public view returns (uint256) {
         return claimedRewards[user];
     }

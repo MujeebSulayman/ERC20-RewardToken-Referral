@@ -1,12 +1,12 @@
 import React from "react";
 import Hero from "../../components/Hero";
-import RewardsContainer from "../../components/RewardsContainer";
+import TokenMint from "../../components/TokenMint";
 
 const Index = () => {
   return (
     <div>
       <Hero />
-      <RewardsContainer />
+      <TokenMint />
     </div>
   );
 };

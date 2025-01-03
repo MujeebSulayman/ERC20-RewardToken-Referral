@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
-import abi from "../artifacts/contracts/HemReward.sol/HemReward.json";
 import address from "../contracts/contractAddress.json";
+import abi from "../artifacts/contracts/HemReward.sol/HemReward.json";
 
 const toWei = (num: number) => ethers.parseEther(num.toString());
 const fromWei = (num: string | number | null): string => {
@@ -128,7 +128,7 @@ const mintTokens = async (amount?: number): Promise<any> => {
 
   try {
     const contract = await getEthereumContract();
-    
+
     const mintAmount = toWei(amount || 100);
 
     tx = await contract.mint(mintAmount);
