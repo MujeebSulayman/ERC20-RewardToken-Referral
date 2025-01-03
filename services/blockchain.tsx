@@ -24,7 +24,9 @@ const getEthereumContract = async () => {
     const contract = new ethers.Contract(address.HemReward, abi.abi, signer);
     return contract;
   } else {
-    const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
+    const provider = new ethers.JsonRpcProvider(
+      process.env.NEXT_PUBLIC_RPC_URL
+    );
     const contract = new ethers.Contract(address.HemReward, abi.abi, provider);
     return contract;
   }
@@ -78,7 +80,7 @@ const claimReferralReward = async (referredUser: string): Promise<any> => {
 const getMaxSupply = async (): Promise<string> => {
   try {
     const contract = await getEthereumContract();
-    const maxSupply = await contract.maxSupply({ cache: 'no-store' });
+    const maxSupply = await contract.getMaxSupply();
     return fromWei(maxSupply);
   } catch (error) {
     console.error("Error getting max supply:", error);
@@ -89,7 +91,7 @@ const getMaxSupply = async (): Promise<string> => {
 const getTotalMinted = async (): Promise<string> => {
   try {
     const contract = await getEthereumContract();
-    const totalMinted = await contract.totalMinted({ cache: 'no-store' });
+    const totalMinted = await contract.getTotalMinted();
     return fromWei(totalMinted);
   } catch (error) {
     console.error("Error getting total minted:", error);
@@ -100,7 +102,7 @@ const getTotalMinted = async (): Promise<string> => {
 const getTotalClaimed = async (): Promise<string> => {
   try {
     const contract = await getEthereumContract();
-    const totalClaimed = await contract.totalClaimed({ cache: 'no-store' });
+    const totalClaimed = await contract.getTotalClaimed();
     return fromWei(totalClaimed);
   } catch (error) {
     console.error("Error getting total claimed:", error);
@@ -111,7 +113,7 @@ const getTotalClaimed = async (): Promise<string> => {
 const getClaimedRewards = async (address: string): Promise<string> => {
   try {
     const contract = await getEthereumContract();
-    const claimed = await contract.getClaimedRewards(address, { cache: 'no-store' });
+    const claimed = await contract.getClaimedRewards(address);
     return fromWei(claimed);
   } catch (error) {
     console.error("Error getting claimed rewards:", error);
@@ -119,16 +121,33 @@ const getClaimedRewards = async (address: string): Promise<string> => {
   }
 };
 
-const mintTokens = async (): Promise<any> => {
+const mintTokens = async (amount?: number): Promise<any> => {
   if (!ethereum) {
     return Promise.reject(new Error("Please install a wallet provider"));
   }
 
   try {
     const contract = await getEthereumContract();
-    const claimed = await getTotalClaimed();
-    const amount = toWei(parseFloat(claimed));
-    tx = await contract.mint(amount);
+    
+    const mintAmount = toWei(amount || 100);
+
+    tx = await contract.mint(mintAmount);
+    await tx.wait();
+    return Promise.resolve(tx);
+  } catch (error: any) {
+    console.error("Minting error:", error);
+    return Promise.reject(error.message || "Minting failed");
+  }
+};
+
+const burnTokens = async (amount: number): Promise<any> => {
+  if (!ethereum) {
+    return Promise.reject(new Error("Please install a wallet provider"));
+  }
+
+  try {
+    const contract = await getEthereumContract();
+    tx = await contract.burn(toWei(amount));
     await tx.wait();
     return Promise.resolve(tx);
   } catch (error) {
@@ -145,6 +164,7 @@ export {
   getTotalClaimed,
   getClaimedRewards,
   mintTokens,
+  burnTokens,
   toWei,
   fromWei,
 };

@@ -25,7 +25,7 @@ const initialStats: RewardStats = {
   claimedRewards: "0",
 };
 
-const RewardsContainer = () => {
+const RewardsContainer: React.FC = () => {
   const { address } = useAccount();
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState<RewardStats>(initialStats);
@@ -47,11 +47,11 @@ const RewardsContainer = () => {
       });
     } catch (error) {
       console.error("Error loading stats:", error);
-      toast.error("Failed to load reward stats");
+      toast.error("Failed to load HMR reward statistics");
     }
   };
 
-  const handleMint = async () => {
+  const handleMint = async (amount?: number) => {
     if (!address) {
       toast.warning("Please connect your wallet first");
       return;
@@ -59,12 +59,13 @@ const RewardsContainer = () => {
 
     setLoading(true);
     try {
-      await mintTokens();
-      toast.success("Tokens minted successfully! 🎉");
+      // Mint 100 tokens by default
+      await mintTokens(amount || 100);
+      toast.success("HMR tokens minted successfully!");
       await loadStats();
     } catch (error: any) {
-      console.error("Error minting tokens:", error);
-      toast.error(error.message || "Failed to mint tokens");
+      console.error("Minting error:", error);
+      toast.error(error.message || "HMR token minting failed");
     } finally {
       setLoading(false);
     }
@@ -72,8 +73,8 @@ const RewardsContainer = () => {
 
   useEffect(() => {
     loadStats();
-    const interval = setInterval(loadStats, 30000);
-    return () => clearInterval(interval);
+    const intervalId = setInterval(loadStats, 30000);
+    return () => clearInterval(intervalId);
   }, [address]);
 
   return (

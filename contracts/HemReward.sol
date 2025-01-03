@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract HemReward is ERC20, Ownable {
-    mapping(address => address) referrals;
-    mapping(address => uint256) referralRewards;
+    mapping(address => address) public referrals;
+    mapping(address => uint256) public referralRewards;
     mapping(address => uint256) public claimedRewards;
 
     uint256 public maxSupply;
@@ -27,7 +27,7 @@ contract HemReward is ERC20, Ownable {
         totalClaimed = 0;
     }
 
-    function mint(uint256 amount) external onlyOwner {
+    function mint(uint256 amount) external {
         require(totalMinted + amount <= maxSupply, "MaxSupply exceeded");
         _mint(msg.sender, amount);
         totalMinted += amount;
@@ -73,5 +73,13 @@ contract HemReward is ERC20, Ownable {
 
     function getTotalClaimed() public view returns (uint256) {
         return totalClaimed;
+    }
+
+    function getMaxSupply() public view returns (uint256) {
+        return maxSupply;
+    }
+
+    function getTotalMinted() public view returns (uint256) {
+        return totalMinted;
     }
 }

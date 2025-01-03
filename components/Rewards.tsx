@@ -1,6 +1,10 @@
-import React from "react";
-import { FaCoins, FaTrophy, FaChartBar, FaWallet } from "react-icons/fa";
-import { motion } from "framer-motion";
+import React from 'react';
+import { 
+  HiCurrencyDollar, 
+  HiChartBar, 
+  HiGift, 
+  HiCash 
+} from 'react-icons/hi';
 
 interface RewardsProps {
   maxSupply: string;
@@ -11,32 +15,61 @@ interface RewardsProps {
   loading: boolean;
 }
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: 20 }
+const formatLargeNumber = (value: string) => {
+  const parts = value.split('.');
+  const integerPart = parts[0];
+  const groups = [];
+  
+  for (let i = integerPart.length; i > 0; i -= 3) {
+    groups.unshift(integerPart.slice(Math.max(0, i - 3), i));
+  }
+  
+  return (
+    <div className="font-mono tracking-tight flex items-baseline">
+      {groups.map((group, index) => (
+        <React.Fragment key={index}>
+          <span className="text-white">{group}</span>
+          {index !== groups.length - 1 && (
+            <span className="text-purple-400 mx-0.5">,</span>
+          )}
+        </React.Fragment>
+      ))}
+      {parts[1] && (
+        <>
+          <span className="text-purple-400 mx-0.5">.</span>
+          <span className="text-purple-300">{parts[1]}</span>
+        </>
+      )}
+    </div>
+  );
 };
 
-const StatCard = ({ title, value, icon: Icon, delay }: { title: string; value: string; icon: any; delay: number }) => (
-  <motion.div
-    variants={fadeInUp}
-    initial="initial"
-    animate="animate"
-    exit="exit"
-    transition={{ duration: 0.5, delay }}
-    className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/10 transition-all duration-300"
-  >
-    <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-blue-500/20">
-      <Icon className="text-2xl text-blue-400" />
-    </div>
-    <div className="flex-1 min-w-0">
-      <p className="text-sm text-blue-300/60 mb-1">{title}</p>
-      <div className="flex items-baseline">
-        <h3 className="text-2xl font-bold text-blue-100 truncate">{value}</h3>
-        <span className="ml-2 text-sm text-blue-300/60">HEM</span>
+const StatCard: React.FC<{
+  icon: React.ElementType;
+  title: string;
+  value: string;
+  className?: string;
+}> = ({ icon: Icon, title, value, className = '' }) => (
+  <div className={`
+    bg-gradient-to-br from-gray-800/40 to-gray-800/20 
+    border border-gray-700/50 rounded-xl p-6 
+    flex flex-col space-y-3
+    ${className}
+  `}>
+    <div className="flex items-center justify-between">
+      <div className="bg-purple-500/20 p-3 rounded-xl">
+        <Icon className="text-2xl text-purple-400" />
       </div>
+      <span className="text-sm font-medium text-gray-400 bg-gray-900/50 px-2 py-1 rounded-full">
+        {title}
+      </span>
     </div>
-  </motion.div>
+    <div>
+      <div className="text-sm text-gray-400 mb-1">Total</div>
+      {formatLargeNumber(value)}
+      <div className="text-xs text-purple-400 mt-1">HMR Tokens</div>
+    </div>
+  </div>
 );
 
 const Rewards: React.FC<RewardsProps> = ({
@@ -45,103 +78,66 @@ const Rewards: React.FC<RewardsProps> = ({
   totalClaimed,
   claimedRewards,
   onMint,
-  loading,
+  loading
 }) => {
   const stats = [
-    { title: "Maximum Supply", value: maxSupply, icon: FaChartBar, delay: 0.1 },
-    { title: "Total Minted", value: totalMinted, icon: FaCoins, delay: 0.2 },
-    { title: "Total Claimed", value: totalClaimed, icon: FaTrophy, delay: 0.3 },
-    { title: "Your Rewards", value: claimedRewards, icon: FaWallet, delay: 0.4 },
+    { 
+      icon: HiChartBar, 
+      title: 'Max Supply', 
+      value: maxSupply 
+    },
+    { 
+      icon: HiCurrencyDollar, 
+      title: 'Total Minted', 
+      value: totalMinted 
+    },
+    { 
+      icon: HiGift, 
+      title: 'Total Claimed', 
+      value: totalClaimed 
+    },
+    { 
+      icon: HiCash, 
+      title: 'Your Rewards', 
+      value: claimedRewards 
+    }
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="relative"
-    >
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-1/2 -left-1/2 w-full h-full">
-          <motion.div
-            animate={{
-              rotate: 360,
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl"
-          />
+    <div className="min-h-screen pt-20 bg-gradient-to-b from-gray-900 to-black">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold text-white">HMR Rewards Dashboard</h1>
         </div>
-      </div>
-
-      <div className="relative z-10">
-        <motion.div
-          variants={fadeInUp}
-          initial="initial"
-          animate="animate"
-          className="text-center mb-12"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 p-0.5"
-          >
-            <div className="w-full h-full rounded-2xl bg-gray-900 flex items-center justify-center">
-              <FaCoins className="text-3xl text-blue-400" />
-            </div>
-          </motion.div>
-          <h1 className="text-4xl font-bold text-blue-100 mb-4">HEM Rewards</h1>
-          <p className="text-blue-300/60 max-w-md mx-auto">
-            Earn and track your rewards in the HEM ecosystem
-          </p>
-        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {stats.map((stat) => (
-            <StatCard key={stat.title} {...stat} />
+          {stats.map((stat, index) => (
+            <StatCard 
+              key={index}
+              icon={stat.icon}
+              title={stat.title}
+              value={stat.value}
+            />
           ))}
         </div>
 
-        <motion.div
-          variants={fadeInUp}
-          initial="initial"
-          animate="animate"
-          transition={{ delay: 0.5 }}
-        >
+        <div className="bg-gradient-to-br from-gray-800/40 to-gray-800/20 border border-gray-700/50 rounded-xl p-6">
           <button
             onClick={onMint}
             disabled={loading}
-            className="group relative w-full bg-gradient-to-r from-blue-500 to-purple-500 p-0.5 rounded-xl overflow-hidden"
+            className={`
+              w-full py-4 rounded-lg text-lg font-semibold transition-all duration-300
+              ${loading 
+                ? 'bg-gray-800 text-gray-500 cursor-not-allowed' 
+                : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-500 hover:to-blue-500'
+              }
+            `}
           >
-            <div className={`
-              relative px-8 py-4 rounded-xl transition-all duration-300
-              ${loading ? 'bg-gray-800' : 'bg-gray-900 group-hover:bg-opacity-80'}
-              flex items-center justify-center space-x-2
-            `}>
-              {loading ? (
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  className="w-6 h-6 border-2 border-blue-300 border-t-transparent rounded-full"
-                />
-              ) : (
-                <>
-                  <FaCoins className="text-blue-300" />
-                  <span className="text-lg font-semibold text-blue-100">
-                    Mint Tokens
-                  </span>
-                </>
-              )}
-            </div>
+            {loading ? 'Minting in Progress...' : 'Mint Tokens'}
           </button>
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

@@ -32,12 +32,10 @@ const TokenPage = () => {
   }, []);
 
   const handleTransfer = async () => {
-    // To be implemented
     console.log("Transfer", transferAmount, "to", recipientAddress);
   };
 
   const handleBurn = async () => {
-    // To be implemented
     console.log("Burn tokens");
   };
 
