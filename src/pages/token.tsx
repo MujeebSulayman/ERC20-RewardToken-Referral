@@ -55,7 +55,6 @@ const TokenPage = () => {
       return;
     }
 
-    // Calculate total tokens to burn (claimed rewards)
     const claimedTokens = parseFloat(claimedRewards);
     const mintedTokens = parseFloat(totalMinted);
     const totalTokensToBurn = claimedTokens + mintedTokens;
@@ -69,15 +68,13 @@ const TokenPage = () => {
     }
 
     try {
-      // Burn all tokens
       await burnTokens(totalTokensToBurn);
-      
+
       toast.success(`Successfully burned ${totalTokensToBurn.toFixed(2)} HMR`, {
         position: "top-right",
         autoClose: 3000,
       });
 
-      // Reset state and refresh data
       await fetchTokenData();
     } catch (error: any) {
       toast.error(reportError(error), {

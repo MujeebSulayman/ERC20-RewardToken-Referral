@@ -16,7 +16,6 @@ import {
 } from "../utils/web3.utils";
 import { useAccount } from "wagmi";
 
-// Utility function to format large numbers with abbreviations
 const formatLargeNumber = (value: string) => {
   const num = parseFloat(value);
 
@@ -90,23 +89,21 @@ const TokenMint: React.FC = () => {
 
     try {
       setLoading(true);
-      // If no amount specified, use default 100 tokens
       const parsedAmount = amount
         ? parseFloat(amount.replace(/,/g, "").replace(" HMR", ""))
         : 100;
 
       await mintTokens(parsedAmount);
 
-      toast.success(`Successfully minted ${parsedAmount} tokens`, {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.success(`Successfully minted ${parsedAmount} tokens`);
 
-      // Refresh minted amount
-      const updatedMinted = await getTotalMinted();
+      const [updatedMinted, updatedClaimed] = await Promise.all([
+        getTotalMinted(),
+        getClaimedRewards(address)
+      ]);
+
       setTotalMinted(updatedMinted);
-
-      // Reset amount after successful mint
+      setClaimedRewards(updatedClaimed);
       setAmount("100");
     } catch (error: any) {
       const errorMessage = reportError(error);
@@ -122,7 +119,7 @@ const TokenMint: React.FC = () => {
   const mintPercentage = calculatePercentage(totalMinted, maxSupply);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900 px-4 sm:px-6 lg:px-8">
       <ToastContainer theme="dark" />
 
       <div className="max-w-7xl mx-auto">

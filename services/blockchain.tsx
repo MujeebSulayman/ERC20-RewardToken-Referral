@@ -69,7 +69,7 @@ const claimReferralReward = async (referredUser: string): Promise<any> => {
 
   try {
     const contract = await getEthereumContract();
-    tx = await contract.claimReferralReward(referredUser);
+    const tx = await contract.claimReferralReward(referredUser);
     await tx.wait();
     return Promise.resolve(tx);
   } catch (error) {
