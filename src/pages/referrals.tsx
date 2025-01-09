@@ -24,7 +24,7 @@ const ReferralsPage = () => {
       setReferralRewards(fromWei(rewards));
     } catch (error) {
       console.error("Error fetching referral rewards:", error);
-      toast.error("Failed to fetch referral rewards")
+      toast.error("Failed to fetch referral rewards");
     }
   };
 
@@ -36,19 +36,19 @@ const ReferralsPage = () => {
 
   const handleSetReferrer = async () => {
     if (!address) {
-      toast.error("Please connect your wallet")
+      toast.error("Please connect your wallet");
       return;
     }
 
     if (!referralAddress || referralAddress.trim() === "") {
-      toast.error("Please enter a valid referrer address")
+      toast.error("Please enter a valid referrer address");
       return;
     }
 
     try {
       setLoading(true);
       await setReferral(referralAddress);
-      toast.success("Referrer set successfully")
+      toast.success("Referrer set successfully");
       setReferralAddress("");
     } catch (error) {
       toast.error(reportError(error), {
@@ -62,15 +62,15 @@ const ReferralsPage = () => {
 
   const handleClaimReferralRewards = async () => {
     if (!address) {
-      toast.error("Please connect your wallet")
+      toast.error("Please connect your wallet");
       return;
     }
 
     try {
       setLoading(true);
-     
+
       await claimReferralReward(address);
-      toast.success(`Successfully claimed referral rewards`)
+      toast.success(`Successfully claimed referral rewards`);
 
       await fetchReferralRewards();
     } catch (error) {
