@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import address from "../contracts/contractAddress.json";
-import abi from "../artifacts/contracts/HemReward.sol/HemReward.json";
+import abi from '../artifacts/contracts/HemReward.sol/HemReward.json';
 
 const toWei = (num: number) => ethers.parseEther(num.toString());
 const fromWei = (num: string | number | null): string => {
