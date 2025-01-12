@@ -106,5 +106,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Contact
 Your Name - your.email@example.com
 
-Project Link: [https://github.com/yourusername/HemReward](https://github.com/yourusername/HemReward)
+Project Link: [https://github.com/yourusername/HemReward](https://github.com/mujeebsulayman/HemReward)
 Live Demo: [erc-20-reward-token-referral.vercel.app](https://erc-20-reward-token-referral.vercel.app)
