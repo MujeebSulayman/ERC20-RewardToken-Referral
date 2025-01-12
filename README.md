@@ -3,6 +3,8 @@
 ## Project Overview
 HemReward is a blockchain-based reward system for blood donation activities, built on Ethereum using Next.js and Smart Contracts. The platform incentivizes blood donation through tokenized rewards and a referral system.
 
+![HemReward Homepage](./public/home.png)
+
 Live Demo: [erc-20-reward-token-referral.vercel.app](https://erc-20-reward-token-referral.vercel.app)
 
 ## Features
@@ -104,7 +106,7 @@ npx hardhat test
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
-Your Name - your.email@example.com
+Your Name - your.sulaymanmujeeb6@example.com
 
 Project Link: [https://github.com/yourusername/HemReward](https://github.com/mujeebsulayman/HemReward)
 Live Demo: [erc-20-reward-token-referral.vercel.app](https://erc-20-reward-token-referral.vercel.app)
